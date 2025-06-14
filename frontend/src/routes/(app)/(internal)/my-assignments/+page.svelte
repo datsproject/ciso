@@ -11,7 +11,7 @@
 
 	const eta_span_class = { true: 'bg-orange-400 text-white' };
 	const status_span_class = {
-		on_hold: 'bg-violet-500 text-white p-1 rounded',
+		on_hold: 'bg-blue-500 text-white p-1 rounded',
 		deprecated: 'bg-red-400 text-white p-1 rounded'
 	};
 </script>
@@ -43,7 +43,7 @@
 								scope="row"
 								class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
 							>
-								<Anchor href="/applied-controls/{ac.id}" class="hover:text-violet-400"
+								<Anchor href="/applied-controls/{ac.id}" class="hover:text-blue-400"
 									>{ac.name}</Anchor
 								>
 							</th>
@@ -103,7 +103,7 @@
 									scope="row"
 									class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
 								>
-									<Anchor href="/risk-assessments/{ra.id}" class="hover:text-violet-400"
+									<Anchor href="/risk-assessments/{ra.id}" class="hover:text-blue-400"
 										>{ra.name}</Anchor
 									>
 								</th>
@@ -118,7 +118,7 @@
 	</div>
 
 	<div class="text-left col-span-full lg:col-span-6">
-		<div class="text-lg font-black underline underline-offset-4 decoration-4 decoration-purple-300">
+		<div class="text-lg font-black underline underline-offset-4 decoration-4 decoration-blue-300">
 			{m.assignedRisks()}
 		</div>
 		<div class="text-left">
@@ -141,7 +141,7 @@
 									scope="row"
 									class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
 								>
-									<Anchor href="/risk-scenarios/{rs.id}" class="hover:text-violet-400"
+									<Anchor href="/risk-scenarios/{rs.id}" class="hover:text-blue-400"
 										>{rs.name}</Anchor
 									>
 								</th>

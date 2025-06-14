@@ -13,7 +13,7 @@
 			mitigate: 'bg-green-200',
 			accept: 'bg-sky-200',
 			avoid: 'bg-red-200',
-			transfer: 'bg-violet-200'
+			transfer: 'bg-blue-200'
 		};
 		return map[status] ?? 'bg-gray-200';
 	};
