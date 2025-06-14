@@ -9,7 +9,7 @@
 	<ul class="list-disc p-4 m-2">
 		{#each mapping_sets as mset}
 			<li class="">
-				<Anchor href={`/experimental/mapping/${mset.id}`} class="text-md hover:text-purple-700"
+				<Anchor href={`/experimental/mapping/${mset.id}`} class="text-md hover:text-blue-700"
 					>{mset.name}</Anchor
 				>
 			</li>
