@@ -10,8 +10,8 @@
 		mimeType: ''
 	});
 
-	export let height = 200;
-	export let width = 200;
+	export let height = 300;
+	export let width = 300;
 
 	const clientSettings = $page.data.clientSettings;
 	let logo: string;

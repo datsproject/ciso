@@ -47,7 +47,6 @@
 
 	const _form = superForm(timelineForm, {
 		dataType: 'json',
-		enctype: 'application/x-www-form-urlencoded',
 		invalidateAll,
 		applyAction: $$props.applyAction ?? true,
 		resetForm: true,
@@ -73,21 +72,19 @@
 		source.body.map((item: Record<string, any>, index: number) => {
 			return {
 				...item,
-				meta: source.meta
-					? source.meta.results
-						? { ...source.meta.results[index] }
-						: { ...source.meta[index] }
-					: undefined
+				meta: source.meta && typeof source.meta === 'object' && !Array.isArray(source.meta) && (source.meta as any).results
+					? { ...(source.meta as any).results[index] }
+					: item
 			};
 		}),
 		{
 			rowsPerPage: pagination ? numberRowsPerPage : undefined,
-			totalRows: source.meta.count
+			totalRows: source.meta && typeof source.meta === 'object' && !Array.isArray(source.meta) ? (source.meta as any).count || 0 : 0
 		}
 	);
 	const rows = handler.getRows();
 	const field = data.model.reverseForeignKeyFields.find(
-		(item) => item.urlModel === 'timeline-entries'
+		(item: any) => item.urlModel === 'timeline-entries'
 	);
 	handler.onChange((state: State) =>
 		loadTableData({
@@ -105,18 +102,27 @@
 		invalidateTable = false;
 	}
 
-	const preventDelete = (row: TableSource) =>
-		['severity_changed', 'status_changed'].includes(row.meta.entry_type);
+	const preventDelete = (row: any) =>
+		row.meta && ['severity_changed', 'status_changed'].includes(row.meta.entry_type);
 
 	const modalStore: ModalStore = getModalStore();
 
 	function modalEvidenceCreateForm(): void {
+		// Check if evidence forms exist in the data structure
+		const evidenceData = (data as any).evidenceCreateForm;
+		const evidenceModel = (data as any).evidenceModel;
+		
+		if (!evidenceData || !evidenceModel) {
+			console.warn('Evidence creation not available for this page');
+			return;
+		}
+		
 		const modalComponent: ModalComponent = {
 			ref: CreateModal,
 			props: {
-				form: data.evidenceCreateForm,
+				form: evidenceData,
 				formAction: '?/createEvidence',
-				model: data.evidenceModel,
+				model: evidenceModel,
 				debug: false
 			}
 		};
@@ -124,7 +130,7 @@
 			type: 'component',
 			component: modalComponent,
 			// Data
-			title: safeTranslate('add-' + data.evidenceModel.localName)
+			title: safeTranslate('add-' + evidenceModel.localName)
 		};
 		modalStore.trigger(modal);
 	}
@@ -194,7 +200,7 @@
 						optionsEndpoint="incidents"
 						field="incident"
 						label={m.incident()}
-						hidden={initialData.incident}
+						hidden={initialData?.incident}
 					/>
 					<Select
 						{form}
@@ -270,8 +276,8 @@
 			<RowsPerPage {handler} />
 		</div>
 		<ol class="relative border-s border-primary-500 dark:border-primary-700">
-			{#each $rows as row, rowIndex}
-				{@const meta = row?.meta ?? row}
+					{#each $rows as row, rowIndex}
+			{@const meta = row?.meta || row}
 				{@const actionsURLModel = 'timeline-entries'}
 				<li class="mb-10 ms-4">
 					<div
@@ -291,7 +297,7 @@
 								detailURL={`/${actionsURLModel}/${meta.id}`}
 								editURL={`/${actionsURLModel}/${meta.id}/edit?next=${encodeURIComponent($page.url.pathname + $page.url.search)}`}
 								{row}
-								hasBody={$$slots.actionsBody}
+								hasBody={false}
 								identifierField={'id'}
 								preventDelete={preventDelete(row)}
 							></TableRowActions>
@@ -302,7 +308,7 @@
 							{/if}
 						</div>
 						<div class="mb-1">
-							<span class="text-xs font-mono bg-violet-700 text-white p-1 rounded"
+							<span class="text-xs font-mono bg-blue-700 text-white p-1 rounded"
 								>{safeTranslate(meta.entry_type)}</span
 							>
 						</div>
