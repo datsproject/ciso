@@ -506,7 +506,7 @@
 				</section>
 			{:else if tabSet === 3}
 				<span class="text-xl font-extrabold"
-					><a href="/recap" class="hover:text-purple-500">{m.sectionMoved()}</a></span
+					><a href="/recap" class="hover:text-blue-500">{m.sectionMoved()}</a></span
 				>
 				<div class="flex flex-col space-y-2"></div>
 			{/if}
