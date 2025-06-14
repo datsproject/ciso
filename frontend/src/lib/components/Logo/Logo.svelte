@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ciso from '$lib/assets/logo.png';
+	import datsLogo from '$lib/assets/logo.png';
 
-	export let height = 200;
-	export let width = 200;
+	export let height = 80;
+	export let width = 240;
 </script>
 
-<img class="c" {height} {width} src={ciso} alt="Ciso-assistant icon" />
+<img class="dats-logo" {height} {width} src={datsLogo} alt="DATS - Your Cybersecurity Partner" />

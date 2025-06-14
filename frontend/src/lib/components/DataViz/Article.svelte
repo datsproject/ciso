@@ -8,7 +8,7 @@
 </script>
 
 <article
-	class="hover:animate-background rounded-xl bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 p-0.5 shadow-xl transition hover:bg-[length:400%_400%] hover:shadow-sm hover:[animation-duration:_4s]"
+	class="hover:animate-background rounded-xl bg-gradient-to-r from-green-300 via-blue-500 to-cyan-600 p-0.5 shadow-xl transition hover:bg-[length:400%_400%] hover:shadow-sm hover:[animation-duration:_4s]"
 >
 	<Anchor href={link}>
 		<div class="rounded-[10px] bg-white p-4 !pt-20 sm:p-6 h-full">
@@ -21,7 +21,7 @@
 			<div class="mt-4 flex flex-wrap gap-1">
 				{#each tags as tag}
 					<span
-						class="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-xs text-purple-600"
+						class="whitespace-nowrap rounded-full bg-blue-100 px-2.5 py-0.5 text-xs text-blue-600"
 					>
 						{tag}
 					</span>

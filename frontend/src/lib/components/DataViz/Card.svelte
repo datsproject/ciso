@@ -10,7 +10,7 @@
 	export let emphasis: boolean = false;
 	let cEmphasis = '';
 	if (emphasis) {
-		cEmphasis = 'border border-y-0 border-r-0 border-l-2 border-l-violet-600';
+		cEmphasis = 'border border-y-0 border-r-0 border-l-2 border-l-blue-600';
 	}
 	export let customClass: string = '';
 </script>
@@ -19,7 +19,7 @@
 	<Anchor
 		{href}
 		{label}
-		class="flex flex-col shadow-lg text-purple-800 p-2 h-28 bg-white hover:bg-violet-50 {cEmphasis} {customClass}"
+		class="flex flex-col shadow-lg text-blue-800 p-2 h-28 bg-white hover:bg-blue-50 {cEmphasis} {customClass}"
 	>
 		<div class="text-xs">
 			{#if icon}
@@ -35,7 +35,7 @@
 		</div>
 	</Anchor>
 {:else}
-	<div class="flex flex-col shadow-lg text-purple-800 p-2 h-28 bg-white {cEmphasis} {customClass}">
+	<div class="flex flex-col shadow-lg text-blue-800 p-2 h-28 bg-white {cEmphasis} {customClass}">
 		<div class="text-xs">
 			{#if icon}
 				<span><i class={icon}></i></span>
