@@ -5,7 +5,7 @@ import plugin from 'tailwindcss/plugin';
 // 1. Import the Skeleton plugin
 import { skeleton } from '@skeletonlabs/tw-plugin';
 
-import { cisoTheme } from './ciso-theme';
+import { datsTheme } from './dats-theme';
 
 const config = {
 	// 2. Opt for dark mode to be handled via the class method
@@ -16,7 +16,34 @@ const config = {
 		join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
 	],
 	theme: {
-		extend: {}
+		extend: {
+			colors: {
+				'dats-cyan': '#00d4ff',
+				'dats-blue': '#0ea5e9',
+				'dats-dark': '#0a0a0a',
+				'dats-gray': '#1a1a1a'
+			},
+			animation: {
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'fade-in': 'fade-in 0.5s ease-out',
+			},
+			keyframes: {
+				'pulse-glow': {
+					'0%, 100%': { 
+						'box-shadow': '0 0 5px #00d4ff, 0 0 10px #00d4ff, 0 0 15px #00d4ff',
+						'transform': 'scale(1)' 
+					},
+					'50%': { 
+						'box-shadow': '0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff',
+						'transform': 'scale(1.02)' 
+					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				}
+			}
+		}
 	},
 
 	plugins: [
@@ -24,7 +51,7 @@ const config = {
 		require('@tailwindcss/forms'),
 		skeleton({
 			themes: {
-				custom: [cisoTheme]
+				custom: [datsTheme]
 			}
 		}),
 		// Courtesy of bholmesdev: https://gist.github.com/bholmesdev/f326094e2097068c5de8f818f9aa8713
