@@ -15,8 +15,8 @@
 
 	initializeStores();
 
-	import Toast from '$lib/components/Toast/Toast.svelte';
 	import Modal from '$lib/components/Modals/Modal.svelte';
+	import { Toast } from '@skeletonlabs/skeleton';
 	import type { ModalComponent, ToastSettings } from '@skeletonlabs/skeleton';
 	import { clientSideToast } from '$lib/utils/stores';
 

@@ -66,7 +66,7 @@
 
 <!-- App Shell -->
 <AppShell
-	slotPageContent="p-8 bg-gradient-to-br from-violet-100 to-slate-200"
+	slotPageContent="p-8 bg-gradient-to-br from-blue-50 to-slate-200"
 	regionPage="transition-all duration-300 {classesSidebarOpen(sidebarOpen)}"
 >
 	<svelte:fragment slot="sidebarLeft">
@@ -75,7 +75,7 @@
 	<svelte:fragment slot="pageHeader">
 		<AppBar background="bg-white" padding="py-2 px-4" class="relative">
 			<span
-				class="text-2xl font-bold pb-1 bg-gradient-to-r from-pink-500 to-violet-600 bg-clip-text text-transparent"
+				class="text-2xl font-bold pb-1 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent dats-glow"
 				id="page-title"
 			>
 				{safeTranslate($pageTitle)}
@@ -83,10 +83,10 @@
 			{#if data?.user?.is_admin}
 				<button
 					on:click={modalQuickStart}
-					class="absolute top-7 right-9 p-2 rounded-full bg-violet-500 text-white text-xs shadow-lg
-                 ring-2 ring-violet-400 ring-offset-2 transition-all duration-300
-                 hover:bg-violet-600 hover:ring-violet-300 hover:ring-offset-violet-100
-                 hover:shadow-violet-500/50 focus:outline-none focus:ring-violet-500"
+					class="absolute top-7 right-9 p-2 rounded-full bg-blue-600 text-white text-xs shadow-lg
+					ring-2 ring-blue-400 ring-offset-2 transition-all duration-300
+					hover:bg-blue-700 hover:ring-blue-300 hover:ring-offset-blue-100
+					hover:shadow-blue-500/50 focus:outline-none focus:ring-blue-500"
 				>
 					{m.quickStart()}
 				</button>
