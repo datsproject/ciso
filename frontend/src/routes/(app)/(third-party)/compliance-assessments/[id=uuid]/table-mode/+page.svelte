@@ -448,7 +448,7 @@
 									</RadioGroup>
 								</div>
 								<div class="flex flex-col items-center w-1/2">
-									<p class="flex items-center font-semibold text-purple-600 italic">
+									<p class="flex items-center font-semibold text-blue-600 italic">
 										{m.result()}
 									</p>
 									<RadioGroup class="w-full flex-wrap items-center">
