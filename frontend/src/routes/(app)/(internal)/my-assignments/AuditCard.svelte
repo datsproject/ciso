@@ -34,7 +34,7 @@
 			<div class="flex justify-center pb-3">
 				<a
 					href="/compliance-assessments/{audit.id}"
-					class="hover:text-violet-400 font-semibold text-center">{audit.name}</a
+					class="hover:text-blue-400 font-semibold text-center">{audit.name}</a
 				>
 			</div>
 		</div>
