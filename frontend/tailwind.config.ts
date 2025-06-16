@@ -17,6 +17,10 @@ const config = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				'sans': ['Lato', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+				'lato': ['Lato', 'sans-serif']
+			},
 			colors: {
 				'dats-cyan': '#00d4ff',
 				'dats-blue': '#0ea5e9',

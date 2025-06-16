@@ -4,8 +4,8 @@ export const datsTheme: CustomThemeConfig = {
 	name: 'dats-theme',
 	properties: {
 		// =~= Theme Properties =~=
-		'--theme-font-family-base': `system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
-		'--theme-font-family-heading': `system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
+		'--theme-font-family-base': `'Lato', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
+		'--theme-font-family-heading': `'Lato', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`,
 		'--theme-font-color-base': '15 23 42', // Dark text for light backgrounds
 		'--theme-font-color-dark': '15 23 42',
 		'--theme-rounded-base': '8px',
