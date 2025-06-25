@@ -58,19 +58,18 @@ jobs:
         zone: ${{ secrets.GCE_ZONE }}
         ssh_private_key: ${{ secrets.GCE_SSH_KEY }}
         command: |
-          # Harbor login
-          docker login ${{ env.REGISTRY_URL }} -u ${{ env.REGISTRY_USR }} -p ${{ env.REGISTRY_PWD }}
+          sh -c '
+            docker login ${{ env.REGISTRY_URL }} -u ${{ env.REGISTRY_USR }} -p ${{ env.REGISTRY_PWD }}
 
-          # docker-compose.override.yml oluştur
-          cat <<EOF > /opt/ciso/docker-compose.override.yml
-          services:
-            backend:
-              image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
-            frontend:
-              image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-frontend:${{ env.TAG }}
-            huey:
-              image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
-          EOF
+            cat <<EOF > /opt/ciso/docker-compose.override.yml
+            services:
+              backend:
+                image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
+              frontend:
+                image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-frontend:${{ env.TAG }}
+              huey:
+                image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
+            EOF
 
-          # Compose ile ayağa kaldır
-          docker compose -f /opt/ciso/docker-compose.yml -f /opt/ciso/docker-compose.override.yml up -d
+            docker compose -f /opt/ciso/docker-compose.yml -f /opt/ciso/docker-compose.override.yml up -d
+          '
