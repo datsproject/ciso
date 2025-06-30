@@ -67,7 +67,7 @@ jobs:
 
     - name: Copy docker-compose files to VM
       run: |
-        mkdir -p /opt/ciso
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }} "sudo mkdir -p /opt/ciso && sudo chown -R \$(whoami) /opt/ciso"
         scp -i key.pem -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }}:/opt/ciso/
 
         cat <<EOF > override.yml
