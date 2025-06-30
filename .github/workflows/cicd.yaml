@@ -73,11 +73,11 @@ jobs:
         cat <<EOF > override.yml
         services:
           backend:
-            image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG
+            image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
           frontend:
-            image: $REGISTRY_URL/dats-harici/ciso-frontend:$TAG
+            image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-frontend:${{ env.TAG }}
           huey:
-            image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG
+            image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
         EOF
 
         scp -i key.pem -o StrictHostKeyChecking=no override.yml ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }}:/opt/ciso/docker-compose.override.yml
@@ -85,7 +85,7 @@ jobs:
     - name: SSH and deploy
       run: |
         ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }} << EOF
-          docker login $REGISTRY_URL -u $REGISTRY_USR -p $REGISTRY_PWD
+          docker login ${{ env.REGISTRY_URL }} -u ${{ env.REGISTRY_USR }} -p ${{ env.REGISTRY_PWD }}
           cd /opt/ciso
           docker compose down
           docker system prune -f
