@@ -85,7 +85,7 @@ jobs:
     - name: SSH and deploy
       run: |
         ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }} << EOF
-          docker login "${{ env.REGISTRY_URL }}"" -u "${{ env.REGISTRY_USR }}" -p "${{ env.REGISTRY_PWD }}"
+          docker login "$REGISTRY_URL" -u "$REGISTRY_USR" --password-stdin <<< "$REGISTRY_PWD"
           cd /opt/ciso
           docker compose down
           docker system prune -f
