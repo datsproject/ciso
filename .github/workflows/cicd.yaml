@@ -50,36 +50,38 @@ jobs:
     needs: build-push
     runs-on: ubuntu-latest
     environment: production
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL_PROD }}
+      REGISTRY_USR: ${{ secrets.REGISTRY_USERNAME_PROD }}
+      REGISTRY_PWD: ${{ secrets.REGISTRY_PASSWORD_PROD }}
+      TAG: v${{ github.run_number }}
+
     steps:
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json: '${{ secrets.GCE_SA_KEY }}'
-
-    - name: Prepare deploy script
+    - name: Setup SSH key
       run: |
-        cat <<'EOF' | base64 -w0 > deploy_script.b64
-        docker login $REGISTRY_URL -u $REGISTRY_USR -p $REGISTRY_PWD
+        echo "${{ secrets.GCE_SSH_KEY }}" > key.pem
+        chmod 600 key.pem
 
-        echo "services:" > /opt/ciso/docker-compose.override.yml
-        echo "  backend:" >> /opt/ciso/docker-compose.override.yml
-        echo "    image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG" >> /opt/ciso/docker-compose.override.yml
-        echo "  frontend:" >> /opt/ciso/docker-compose.override.yml
-        echo "    image: $REGISTRY_URL/dats-harici/ciso-frontend:$TAG" >> /opt/ciso/docker-compose.override.yml
-        echo "  huey:" >> /opt/ciso/docker-compose.override.yml
-        echo "    image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG" >> /opt/ciso/docker-compose.override.yml
-
-        docker compose -f /opt/ciso/docker-compose.yml -f /opt/ciso/docker-compose.override.yml up -d
+    - name: Copy compose files to VM
+      run: |
+        scp -i key.pem -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }}:/opt/ciso/
+        
+        cat <<EOF > override.yml
+        services:
+          backend:
+            image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG
+          frontend:
+            image: $REGISTRY_URL/dats-harici/ciso-frontend:$TAG
+          huey:
+            image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG
         EOF
 
-    - id: read-script
-      run: echo "encoded=$(cat deploy_script.b64)" >> $GITHUB_OUTPUT
+        scp -i key.pem -o StrictHostKeyChecking=no override.yml ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }}:/opt/ciso/docker-compose.override.yml
 
-    - name: Deploy via SSH
-      uses: google-github-actions/ssh-compute@v1
-      with:
-        instance_name: ${{ secrets.GCE_VM }}
-        zone: ${{ secrets.GCE_ZONE }}
-        ssh_private_key: ${{ secrets.GCE_SSH_KEY }}
-        command: |
-          echo '${{ steps.read-script.outputs.encoded }}' | base64 -d | bash
+    - name: Deploy on VM
+      run: |
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }} << EOF
+          docker login $REGISTRY_URL -u $REGISTRY_USR -p $REGISTRY_PWD
+          cd /opt/ciso
+          docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
+        EOF
