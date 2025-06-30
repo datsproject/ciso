@@ -67,15 +67,13 @@ jobs:
           sh -c '
             docker login ${{ env.REGISTRY_URL }} -u ${{ env.REGISTRY_USR }} -p ${{ env.REGISTRY_PWD }}
 
-            cat <<EOF > /opt/ciso/docker-compose.override.yml
-            services:
-              backend:
-                image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
-              frontend:
-                image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-frontend:${{ env.TAG }}
-              huey:
-                image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
-            EOF
+            echo "services:" > /opt/ciso/docker-compose.override.yml
+            echo "  backend:" >> /opt/ciso/docker-compose.override.yml
+            echo "    image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}" >> /opt/ciso/docker-compose.override.yml
+            echo "  frontend:" >> /opt/ciso/docker-compose.override.yml
+            echo "    image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-frontend:${{ env.TAG }}" >> /opt/ciso/docker-compose.override.yml
+            echo "  huey:" >> /opt/ciso/docker-compose.override.yml
+            echo "    image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}" >> /opt/ciso/docker-compose.override.yml
 
             docker compose -f /opt/ciso/docker-compose.yml -f /opt/ciso/docker-compose.override.yml up -d
           '
