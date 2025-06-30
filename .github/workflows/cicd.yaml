@@ -51,29 +51,35 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v1
       with:
         credentials_json: '${{ secrets.GCE_SA_KEY }}'
 
-    - name: Deploy to GCE via SSH
+    - name: Prepare deploy script
+      run: |
+        cat <<'EOF' | base64 -w0 > deploy_script.b64
+        docker login $REGISTRY_URL -u $REGISTRY_USR -p $REGISTRY_PWD
+
+        echo "services:" > /opt/ciso/docker-compose.override.yml
+        echo "  backend:" >> /opt/ciso/docker-compose.override.yml
+        echo "    image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG" >> /opt/ciso/docker-compose.override.yml
+        echo "  frontend:" >> /opt/ciso/docker-compose.override.yml
+        echo "    image: $REGISTRY_URL/dats-harici/ciso-frontend:$TAG" >> /opt/ciso/docker-compose.override.yml
+        echo "  huey:" >> /opt/ciso/docker-compose.override.yml
+        echo "    image: $REGISTRY_URL/dats-harici/ciso-backend:$TAG" >> /opt/ciso/docker-compose.override.yml
+
+        docker compose -f /opt/ciso/docker-compose.yml -f /opt/ciso/docker-compose.override.yml up -d
+        EOF
+
+    - id: read-script
+      run: echo "encoded=$(cat deploy_script.b64)" >> $GITHUB_OUTPUT
+
+    - name: Deploy via SSH
       uses: google-github-actions/ssh-compute@v1
       with:
         instance_name: ${{ secrets.GCE_VM }}
         zone: ${{ secrets.GCE_ZONE }}
         ssh_private_key: ${{ secrets.GCE_SSH_KEY }}
         command: |
-          sh -c '
-            docker login ${{ env.REGISTRY_URL }} -u ${{ env.REGISTRY_USR }} -p ${{ env.REGISTRY_PWD }}
-
-            echo "services:" > /opt/ciso/docker-compose.override.yml
-            echo "  backend:" >> /opt/ciso/docker-compose.override.yml
-            echo "    image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}" >> /opt/ciso/docker-compose.override.yml
-            echo "  frontend:" >> /opt/ciso/docker-compose.override.yml
-            echo "    image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-frontend:${{ env.TAG }}" >> /opt/ciso/docker-compose.override.yml
-            echo "  huey:" >> /opt/ciso/docker-compose.override.yml
-            echo "    image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}" >> /opt/ciso/docker-compose.override.yml
-
-            docker compose -f /opt/ciso/docker-compose.yml -f /opt/ciso/docker-compose.override.yml up -d
-          '
+          echo '${{ steps.read-script.outputs.encoded }}' | base64 -d | bash
