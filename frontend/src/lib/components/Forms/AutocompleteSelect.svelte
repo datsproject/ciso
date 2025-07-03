@@ -325,7 +325,7 @@
 		</div>
 	{/if}
 	<div
-		class="control overflow-x-clip flex items-center space-x-2"
+		class="control overflow-x-clip flex items-center space-x-2 z-10"
 		data-testid="{fieldContext}-{field.replaceAll('_', '-')}"
 	>
 		<input type="hidden" name={field} value={$value ? $value : ''} />

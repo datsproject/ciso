@@ -14,7 +14,7 @@
 </div>
 
 {#if data.object.is_local}
-	<div class="card bg-white shadow p-4 mt-2">
+	<div class="card bg-white shadow p-4 mt-2 z-0">
 		<p class="text-gray-500 text-sm">
 			{m.setTemporaryPassword1()}
 			<a
