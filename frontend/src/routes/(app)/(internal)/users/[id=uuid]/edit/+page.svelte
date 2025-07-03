@@ -9,12 +9,8 @@
 	export let data: PageData;
 </script>
 
-<div class="card bg-white shadow p-4">
-	<ModelForm form={data.form} schema={UserEditSchema} model={data.model} />
-</div>
-
 {#if data.object.is_local}
-	<div class="card bg-white shadow p-4 mt-2 z-0">
+	<div class="card bg-white shadow p-4 my-2 z-0">
 		<p class="text-gray-500 text-sm">
 			{m.setTemporaryPassword1()}
 			<a
@@ -25,3 +21,6 @@
 		</p>
 	</div>
 {/if}
+<div class="card bg-white shadow p-4">
+	<ModelForm form={data.form} schema={UserEditSchema} model={data.model} />
+</div>
