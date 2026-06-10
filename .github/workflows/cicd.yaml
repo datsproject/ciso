@@ -55,6 +55,7 @@ jobs:
       REGISTRY_USR: "github"
       REGISTRY_PWD: ${{ secrets.REGISTRY_PASSWORD }}
       SSH_KEY: ${{ secrets.SSH_KEY }}
+      SSH_USER: ${{ secrets.SSH_USER }}
       SERVER_IP: ${{ secrets.SERVER_IP }}
       TAG: v${{ github.run_number }}
 
