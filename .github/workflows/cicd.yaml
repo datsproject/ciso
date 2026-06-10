@@ -9,9 +9,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  REGISTRY_URL: ${{ secrets.REGISTRY_URL_PROD }}
-  REGISTRY_USR: ${{ secrets.REGISTRY_USERNAME_PROD }}
-  REGISTRY_PWD: ${{ secrets.REGISTRY_PASSWORD_PROD }}
+  REGISTRY_URL: "harbor.datsproject.io"
+  REGISTRY_USR: "github"
+  REGISTRY_PWD: ${{ secrets.REGISTRY_PASSWORD }}
   TAG: v${{ github.run_number }}
 
 jobs:
@@ -51,9 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL_PROD }}
-      REGISTRY_USR: ${{ secrets.REGISTRY_USERNAME_PROD }}
-      REGISTRY_PWD: ${{ secrets.REGISTRY_PASSWORD_PROD }}
+      REGISTRY_URL: "harbor.datsproject.io"
+      REGISTRY_USR: "github"
+      REGISTRY_PWD: ${{ secrets.REGISTRY_PASSWORD }}
       SSH_KEY: ${{ secrets.SSH_KEY }}
       SERVER_IP: ${{ secrets.SERVER_IP }}
       TAG: v${{ github.run_number }}
