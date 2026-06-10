@@ -54,6 +54,8 @@ jobs:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL_PROD }}
       REGISTRY_USR: ${{ secrets.REGISTRY_USERNAME_PROD }}
       REGISTRY_PWD: ${{ secrets.REGISTRY_PASSWORD_PROD }}
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+      SERVER_IP: ${{ secrets.SERVER_IP }}
       TAG: v${{ github.run_number }}
 
     steps:
@@ -62,13 +64,13 @@ jobs:
 
     - name: Setup SSH key
       run: |
-        echo "${{ secrets.GCE_SSH_KEY }}" > key.pem
+        echo "${{ env.SSH_KEY }}" > key.pem
         chmod 600 key.pem
 
     - name: Copy docker-compose files to VM
       run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }} "sudo mkdir -p /opt/ciso && sudo chown -R \$(whoami) /opt/ciso"
-        scp -i key.pem -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }}:/opt/ciso/
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ env.SSH_USER }}@${{ env.SERVER_IP }} "sudo mkdir -p /opt/ciso && sudo chown -R \$(whoami) /opt/ciso"
+        scp -i key.pem -o StrictHostKeyChecking=no docker-compose.yml ${{ env.SSH_USER }}@${{ env.SERVER_IP }}:/opt/ciso/
 
         cat <<EOF > override.yml
         services:
@@ -80,11 +82,11 @@ jobs:
             image: ${{ env.REGISTRY_URL }}/dats-harici/ciso-backend:${{ env.TAG }}
         EOF
 
-        scp -i key.pem -o StrictHostKeyChecking=no override.yml ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }}:/opt/ciso/docker-compose.override.yml
+        scp -i key.pem -o StrictHostKeyChecking=no override.yml ${{ env.SSH_USER }}@${{ env.SERVER_IP }}:/opt/ciso/docker-compose.override.yml
 
     - name: SSH and deploy
       run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.GCE_SSH_USER }}@${{ secrets.GCE_VM_EXTERNAL_IP }} << EOF
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ env.SSH_USER }}@${{ env.SERVER_IP }} << EOF
           docker login "$REGISTRY_URL" -u "$REGISTRY_USR" --password-stdin <<< "$REGISTRY_PWD"
           cd /opt/ciso
           docker compose down
