@@ -65,7 +65,7 @@ jobs:
 
     - name: Setup SSH key
       run: |
-        echo "${{ env.SSH_KEY }}" > key.pem
+        printf '%s\n' "$SSH_KEY" > key.pem
         chmod 600 key.pem
 
     - name: Copy docker-compose files to VM
